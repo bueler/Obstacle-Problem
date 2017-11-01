@@ -7,8 +7,7 @@ f = lambda x,y: -8.0*(np.pi**2)*np.sin(2.0*np.pi*x)*np.sin(2.0*np.pi*y)
 
 # generate fine grid and discretize Poisson on it
 minm = 2
-#numcycles = 8
-numcycles = 7
+numcycles = 8
 
 m = minm
 for i in range(0, numcycles):

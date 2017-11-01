@@ -51,15 +51,15 @@ def restrict(U, m, F = zeros((1,1))):
             U[k] = F[k]
     return U
 
-def sweep(vh, fh, m, eta):
+def sweep(vh, fh, m, eta, lev):
     A, _, _, _, _ = Poisson2D(m, bvals=True)
     N = (m + 2) ** 2
-    vh = gs(vh, A, fh, N, maxiters = eta)
+    vh = gs(vh, A, fh, N, maxiters = eta, indentlev=lev)
     return vh
 
 def vcycle(m, vh, A, fh, eta1 = 3, eta2 = 3, numcycles = 5, cyclenum = 0):
     if cyclenum < numcycles:
-        vh = sweep(vh, fh, m, eta1)
+        vh = sweep(vh, fh, m, eta1, numcycles - cyclenum)
         f2h = restrict(fh - A.dot(vh), m)
         m = int((m - 1) / 2)
         N = (m + 2) ** 2
@@ -68,11 +68,12 @@ def vcycle(m, vh, A, fh, eta1 = 3, eta2 = 3, numcycles = 5, cyclenum = 0):
         A, _, _, _, _ = Poisson2D(m, bvals=True)
         v2h = vcycle(m, v2h, A, f2h, eta1 = 3, eta2 = 3, numcycles = numcycles, cyclenum = cyclenum)
     else:
+        print('c')
         vh = spsolve(A, fh)
         return vh
     vh = vh + interpolate(v2h, m)
     m = 2 * m + 1
-    vh = sweep(vh, fh, m, eta2)
+    vh = sweep(vh, fh, m, eta2, numcycles - cyclenum + 1)
     return vh
 
 
