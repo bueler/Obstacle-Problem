@@ -2,7 +2,7 @@
 
 ## Synopsis
 
-This package contains solvers obstacle problems of the form
+This package contains solvers for obstacle problems of the form
 
 u(x) >= psi(x), x in Omega
 
